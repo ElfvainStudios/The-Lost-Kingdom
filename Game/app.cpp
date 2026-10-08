@@ -225,16 +225,17 @@ int main () {
                cout << "You have Entered the Crystal Village near the dark forest.\n";
 
                /**
-                * Crystal village Town options
+                * Town options for the Crystal Village.
                 */
-               cout << "";
-               cout << "";
-               cout << "";
-               cout << "";
+               cout << "1. Enter the Blacksmith\n";
+               cout << "2. Enter the Magic Shop\n";
+               cout << "3. Enter the Aventures Guild\n";
+               cout << "4. Enter the Iteam Shope\n";
+               cout << "5. Enter the Dark Forest\n";
+               cout << "6. More Options\n";
 
                cout << "Choice an option: ";
                cin >> choice;
-
 
                /**
                 * Mental note #Final: My Brain is not working currently at this stage of the project as I have
