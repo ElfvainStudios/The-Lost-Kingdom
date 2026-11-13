@@ -2,7 +2,7 @@
 #define CHAPTERS_H
 
 // Chapters Headers
-#include "Chapters/Prologue/prologue.h"
+#include "../Components/Chapters/Prologue/prologue.h"
 //#include "Chapters/ChapterOne/chapterOne.h"
 //#include "Chapters/ChapterTwo/chapterTwo.h"
 //#include "Chapters/ChapterThree/chapterThree.h"

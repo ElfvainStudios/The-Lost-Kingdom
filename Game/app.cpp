@@ -1,6 +1,9 @@
-#include "chapters.h"
+#include "Index/chapters.h"
+#include "Components/Character-Creation/characterCreation.h"
 
 void start() {
+
+    characterCreation();
     // Chapters
     prologue();
     // chapterOne();
