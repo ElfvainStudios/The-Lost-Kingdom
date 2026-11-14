@@ -273,13 +273,9 @@ void GameEngine::explore() {
     if (location->id == "village") {
         std::cout << "Villagers gather near the old well. Elder Rowan may have work for you.\n";
     } else if (location->id == "forest") {
-        if (!contains(player_.inventory, "Moon herb")) {
-            std::cout << "Beneath an ancient oak, you find a moon herb and carefully gather it.\n";
-            player_.inventory.push_back("Moon herb");
-            quests_.gatherHerb(player_);
-        } else {
-            std::cout << "You recognise the old gathering place. The herbs here need time to regrow.\n";
-        }
+        std::cout << "Beneath an ancient oak, you find a moon herb and carefully gather it.\n";
+        player_.inventory.push_back("Moon herb");
+        quests_.gatherHerb(player_);
         if (!contains(player_.inventory, "Field Guide to Moon Herbs")) {
             player_.inventory.push_back("Field Guide to Moon Herbs");
             std::cout << "You discover a weathered field guide tucked beneath a root.\n";
