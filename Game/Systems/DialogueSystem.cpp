@@ -1,5 +1,7 @@
 #include "DialogueSystem.h"
 #include <iostream>
+#include <algorithm>
+#include <cctype>
 
 namespace lostkingdom {
 
@@ -14,8 +16,11 @@ void DialogueSystem::talk(const std::string& locationId, const Player& player, Q
         } else {
             std::cout << "Elder Rowan: 'Would you gather three moon herbs for our healers? (yes/no): ";
             std::string answer;
-            if (std::getline(std::cin, answer) &&
-                (answer == "yes" || answer == "y" || answer == "YES" || answer == "Y")) {
+            if (std::getline(std::cin, answer)) {
+                std::transform(answer.begin(), answer.end(), answer.begin(),
+                    [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+            }
+            if (answer == "yes" || answer == "y") {
                 quests.accept();
                 std::cout << "Quest accepted: A Village in Need.\n";
             } else {
