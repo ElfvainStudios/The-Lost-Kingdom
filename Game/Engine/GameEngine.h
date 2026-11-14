@@ -18,10 +18,11 @@ private:
     QuestSystem quests_;
     bool running_ = true;
 
-    void showIntro();
+    void showIntro() const;
     void showLocation() const;
     void showStatus() const;
     void showInventory() const;
+    void showSpells() const;
     void showHelp() const;
     void showChoices() const;
     void handleCommand(const std::string& command);
@@ -31,6 +32,10 @@ private:
     void createCharacter();
     void talk();
     void fight();
+    void startStory();
+    void readBook();
+    void castSpell();
+    void useItem();
 };
 
 } // namespace lostkingdom

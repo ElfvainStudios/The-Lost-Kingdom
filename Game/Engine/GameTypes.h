@@ -16,7 +16,11 @@ struct Player {
     int attack = 5;
     int defence = 2;
     int gold = 10;
+    int mana = 10;
+    int maxMana = 10;
+    bool storyStarted = false;
     std::vector<std::string> inventory{"Old traveler's map", "Small healing potion"};
+    std::vector<std::string> knownSpells;
 };
 
 struct Location {
