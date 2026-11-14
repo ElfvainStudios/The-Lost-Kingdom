@@ -4,3 +4,6 @@ app.exe
 savegame.dat
 build/
 .vs
+
+# Locally built Windows game executable
+TheLostKingdom.exe
