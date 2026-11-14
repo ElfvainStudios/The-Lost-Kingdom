@@ -69,11 +69,11 @@ std::vector<const Location*> WorldMap::availableExits() const {
 
 void WorldMap::printMap() const {
     std::cout << "\n                 THE KNOWN LANDS\n";
-    std::cout << "                 [Sunken Ruins]\n";
+    std::cout << "                  [Sunken Ruins]\n";
     std::cout << "                       |\n";
-    std::cout << "[Moonwell Lake] -- [Crossroads]    [Whispering Forest]\n";
-    std::cout << "                       |                 |\n";
-    std::cout << "                [Willowmere Village] ---+\n";
+    std::cout << "              [Whispering Forest]\n";
+    std::cout << "                       |\n";
+    std::cout << "[Willowmere Village] -- [Old King's Crossroads] -- [Moonwell Lake]\n";
     std::cout << "\nYou are at: " << (current() ? current()->name : "Unknown") << "\n";
     std::cout << "Discovered places are marked on your map as you travel.\n";
 }
