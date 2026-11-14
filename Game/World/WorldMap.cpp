@@ -88,4 +88,21 @@ bool WorldMap::setCurrent(const std::string& locationId) {
     return true;
 }
 
+std::vector<std::string> WorldMap::discoveredIds() const {
+    std::vector<std::string> ids;
+    for (const auto& entry : locations_) {
+        if (entry.second.discovered) ids.push_back(entry.first);
+    }
+    return ids;
+}
+
+void WorldMap::restoreDiscovered(const std::vector<std::string>& ids) {
+    for (auto& entry : locations_) entry.second.discovered = false;
+    for (const auto& id : ids) {
+        auto it = locations_.find(id);
+        if (it != locations_.end()) it->second.discovered = true;
+    }
+    if (locations_.count(currentId_)) locations_[currentId_].discovered = true;
+}
+
 } // namespace lostkingdom
