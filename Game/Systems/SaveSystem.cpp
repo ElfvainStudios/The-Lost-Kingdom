@@ -74,8 +74,11 @@ bool SaveSystem::load(Player& player, WorldMap& world, QuestSystem& quests,
         if (!(in >> std::quoted(id))) return false;
         discovered.push_back(id);
     }
-    if (loaded.level < 1 || loaded.maxHealth < 1 || loaded.health < 0 ||
-        loaded.health > loaded.maxHealth || !world.setCurrent(locationId)) {
+    if (loaded.level < 1 || loaded.experience < 0 || loaded.maxHealth < 1 ||
+        loaded.health < 0 || loaded.health > loaded.maxHealth ||
+        loaded.attack < 0 || loaded.defence < 0 || loaded.gold < 0 ||
+        progress < 0 || progress > 3 || (accepted && completed) ||
+        !world.setCurrent(locationId)) {
         std::cout << "The save data contains invalid character or location values.\n";
         return false;
     }
