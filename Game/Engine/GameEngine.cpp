@@ -1,8 +1,11 @@
 #include "GameEngine.h"
+#include "../Systems/CombatSystem.h"
+#include "../Systems/DialogueSystem.h"
+#include "../Systems/SaveSystem.h"
 #include <algorithm>
 #include <cctype>
 #include <iostream>
-#include <limits>
+#include <string>
 
 namespace lostkingdom {
 
@@ -93,10 +96,14 @@ void GameEngine::showChoices() const {
     std::cout << "\nWhat would you like to do?\n"
               << "  travel    - travel to a connected location\n"
               << "  explore   - search your current surroundings\n"
+              << "  talk      - speak with people or spirits nearby\n"
+              << "  fight     - begin a turn-based encounter\n"
+              << "  quests    - view your quest journal\n"
               << "  map       - view the 2D world map\n"
               << "  status    - view character stats\n"
               << "  inventory - view carried items\n"
-              << "  rest      - recover health (safe places only)\n"
+              << "  rest      - recover health in the village\n"
+              << "  save/load - save or restore your adventure\n"
               << "  help      - show commands\n"
               << "  quit      - end your session\n";
 }
@@ -104,10 +111,15 @@ void GameEngine::showChoices() const {
 void GameEngine::handleCommand(const std::string& command) {
     if (command == "travel" || command == "move") travel();
     else if (command == "explore" || command == "look") explore();
+    else if (command == "talk" || command == "speak") talk();
+    else if (command == "fight" || command == "combat") fight();
+    else if (command == "quests" || command == "quest" || command == "journal") quests_.printJournal();
     else if (command == "map") world_.printMap();
     else if (command == "status") showStatus();
     else if (command == "inventory" || command == "inv") showInventory();
     else if (command == "rest") rest();
+    else if (command == "save") SaveSystem::save(player_, world_, quests_);
+    else if (command == "load") SaveSystem::load(player_, world_, quests_);
     else if (command == "help") showHelp();
     else if (command == "quit" || command == "exit") running_ = false;
     else if (!command.empty()) std::cout << "Unknown command. Type 'help' to see your options.\n";
@@ -133,7 +145,7 @@ void GameEngine::travel() {
             return;
         }
         const std::string destination = exits[static_cast<std::size_t>(index - 1)]->id;
-        world_.move(destination);
+        if (!world_.move(destination)) std::cout << "You cannot travel there from here.\n";
     } catch (...) {
         std::cout << "Please enter a destination number.\n";
     }
@@ -143,18 +155,31 @@ void GameEngine::explore() {
     const Location* location = world_.current();
     if (!location) return;
     std::cout << "\nYou take your time exploring " << location->name << "...\n";
-    if (location->id == "village")
-        std::cout << "A villager mentions strange lights beyond the Whispering Forest.\n";
-    else if (location->id == "forest")
-        std::cout << "You find a handful of herbs beneath an old oak. You add them to your inventory.\n";
-    else if (location->id == "ruins")
+    if (location->id == "village") {
+        std::cout << "Villagers gather near the old well. Elder Rowan may have work for you.\n";
+    } else if (location->id == "forest") {
+        std::cout << "Beneath an ancient oak, you find a moon herb and carefully gather it.\n";
+        player_.inventory.push_back("Moon herb");
+        quests_.gatherHerb(player_);
+    } else if (location->id == "ruins") {
         std::cout << "A rune glows faintly: 'The crown sleeps where moonlight touches stone.'\n";
-    else if (location->id == "lake")
-        std::cout << "The water restores your spirit. You recover 5 health.\n";
-    else
+    } else if (location->id == "lake") {
+        const int before = player_.health;
+        player_.health = std::min(player_.maxHealth, player_.health + 5);
+        std::cout << "The water restores your spirit. You recover "
+                  << player_.health - before << " health.\n";
+    } else {
         std::cout << "You discover old tracks and fragments of forgotten stories.\n";
-    if (location->id == "forest") player_.inventory.push_back("Forest herbs");
-    if (location->id == "lake") player_.health = std::min(player_.maxHealth, player_.health + 5);
+    }
+}
+
+void GameEngine::talk() {
+    DialogueSystem::talk(world_.currentId(), player_, quests_);
+}
+
+void GameEngine::fight() {
+    CombatSystem::encounter(player_, world_.currentId());
+    if (player_.health == 1) world_.setCurrent("village");
 }
 
 void GameEngine::rest() {
@@ -181,8 +206,11 @@ void GameEngine::showInventory() const {
 
 void GameEngine::showHelp() const {
     std::cout << "\nCommands are words, not real-time controls. Explore the world at your own pace.\n"
-              << "Use 'travel' to select a connected location, 'explore' to inspect it,\n"
-              << "and 'map', 'status' or 'inventory' to review your progress.\n";
+              << "travel: choose a connected destination | explore: search the current area\n"
+              << "talk: speak to local characters | fight: start a turn-based battle\n"
+              << "quests: read objectives | inventory: view items | status: view attributes\n"
+              << "save/load: store or restore your adventure in savegame.dat\n"
+              << "rest: fully recover at the village inn | map: view the 2D world\n";
 }
 
 } // namespace lostkingdom
