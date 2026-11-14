@@ -1,37 +1,41 @@
 ```txt
-  ████████╗██╗  ██╗███████╗
-  ╚══██╔══╝██║  ██║██╔════╝
-     ██║   ███████║█████╗
-     ██║   ██╔══██║██╔══╝
-     ██║   ██║  ██║███████╗
-     ╚═╝   ╚═╝  ╚═╝╚══════╝
-  
-  ██╗      ██████╗ ███████╗████████╗
-  ██║     ██╔═══██╗██╔════╝╚══██╔══╝
-  ██║     ██║   ██║███████╗   ██║
-  ██║     ██║   ██║╚════██║   ██║
-  ███████╗╚██████╔╝███████║   ██║
-  ╚══════╝ ╚═════╝ ╚══════╝   ╚═╝
-  
-  ██╗  ██╗██╗███╗   ██╗ ██████╗ ██████╗  ██████╗ ███╗   ███╗
-  ██║ ██╔╝██║████╗  ██║██╔════╝██╔════╝ ██╔═══██╗████╗ ████║
-  █████╔╝ ██║██╔██╗ ██║██║     ██║  ███╗██║   ██║██╔████╔██║
-  ██╔═██╗ ██║██║╚██╗██║██║     ██║   ██║██║   ██║██║╚██╔╝██║
-  ██║  ██╗██║██║ ╚████║╚██████╗╚██████╔╝╚██████╔╝██║ ╚═╝ ██║
-  ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝     ╚═╝
+  THE LOST KINGDOM
 ```
 
-# The-Lost-Kingdom
-This project contains a text-based console game developed C++. Currently in development to learning c++
+# The Lost Kingdom
 
+A 2D-world, text-based fantasy role-playing game written in standard C++17.
 
-## Table of Content
-- [Installation Guide](./docs/Installation.md)
-- [Game Content Overview](./docs/Overview.md)
-- [Requirements To Run The Game](./SECUIRTY.md)
+Explore a connected world of villages, forests, ruins and forgotten places through a command-driven console interface. Build your character, discover locations, uncover the kingdom's history and grow stronger as the story unfolds.
 
-## First Release
-The first beta release will release when the floor 2 has been done and storyline also completed and up to standard. :)
+## Project documentation
 
-## Contributing To The Project
-- [CONTRIBUTING Guide](./CONTRIBUTING.md)
+- [Game architecture](./docs/GAME_ARCHITECTURE.md)
+- [Contributing guide](./CONTRIBUTING.md)
+
+## Build requirements
+
+- CMake 3.16 or newer
+- A C++17 compatible compiler
+
+```sh
+cmake -S . -B build
+cmake --build build
+```
+
+Run the generated `TheLostKingdom` executable from the build directory.
+
+## Current foundation
+
+- Character name and class selection
+- Command-driven exploration loop
+- Connected 2D location map
+- Travel between discovered world locations
+- Character status and inventory views
+- Location-specific exploration and safe resting
+
+## Planned RPG systems
+
+NPC dialogue, quests, turn-based combat, equipment, shops, progression, save/load and chapter-based story content.
+
+The game is in active development; the first beta release will follow completion and testing of the opening floors and storyline.
