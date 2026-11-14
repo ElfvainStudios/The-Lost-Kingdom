@@ -13,6 +13,12 @@ The Lost Kingdom is a 2D-world, text-based role-playing game written in standard
 - `Game/Components/Chapters/` — chapter content and story scenes.
 - `docs/` — design and technical documentation.
 
+## Choice-driven game flow
+
+The title screen offers a new adventure, continue from save, or quit. A new character can begin in Free Adventure or Main Story mode. Free Adventure skips the prologue and leaves exploration, combat and side quests available immediately. The `story` command starts the prologue later without resetting the character or world. Story state is stored in save format v2; version 1 saves remain readable.
+
+The Keeper of Forgotten Tales is the narrator voice used for the prologue and selected world transitions. The terminal title screen uses built-in ASCII artwork and does not require external image assets. Windows virtual-terminal processing is enabled when the output handle supports it.
+
 ## Core gameplay loop
 
 1. Present the current location and its description.
@@ -51,6 +57,12 @@ Every location has a stable ID, a display name, descriptive text, 2D map coordin
 - Quest journal displays active/completed state and progress.
 - Completion grants experience and gold.
 
+### Books and magic
+- Exploration can uncover the Field Guide to Moon Herbs and the Codex of the First Seal.
+- Reading books teaches spells, including Minor Mend and Arcane Spark.
+- Mana is tracked on the player and restored by resting in Willowmere or exploring Moonwell Lake.
+- Minor Mend restores health outside combat; Arcane Spark is an available combat action.
+
 ### Save and load
 - `save` writes `savegame.dat` in the current working directory.
 - `load` restores character attributes, inventory, current location, discovered locations and starter quest state.
@@ -66,6 +78,11 @@ Every location has a stable ID, a display name, descriptive text, 2D map coordin
 | `talk` | Speak with nearby characters |
 | `fight` | Start a turn-based encounter |
 | `quests` | View quest progress |
+| `story` | Begin the main story at any time |
+| `read` | Read a carried book |
+| `spells` | View learned spells and mana |
+| `cast` | Cast Minor Mend |
+| `use` | Use a healing potion |
 | `map` | Display the 2D map |
 | `status` | View character attributes |
 | `inventory` | View carried items |
@@ -74,7 +91,7 @@ Every location has a stable ID, a display name, descriptive text, 2D map coordin
 | `help` | Show available commands |
 | `quit` | End the session |
 
-Combat actions are entered as `attack`, `defend`, `potion` or `run`.
+Combat actions are entered as `attack`, `defend`, `potion`, `magic` or `run`.
 
 ## Build
 
@@ -86,6 +103,10 @@ cmake --build build
 ```
 
 On Windows, run the executable produced in the build directory. On Linux/macOS, run `./build/TheLostKingdom`.
+
+## Release-readiness status
+
+This branch is an integrated development milestone, not a production release. Before release, add automated tests for game-flow choices, combat, quest repetition, item use, spell costs, and save compatibility; complete the main-story chapter objectives; expand the item/equipment and magic catalogues; and verify the Linux and Windows CI builds.
 
 ## Next development milestones
 
