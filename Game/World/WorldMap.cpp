@@ -68,14 +68,21 @@ std::vector<const Location*> WorldMap::availableExits() const {
 }
 
 void WorldMap::printMap() const {
+    const auto marker = [this](const std::string& id) {
+        const auto it = locations_.find(id);
+        if (id == currentId_) return '@';
+        return it != locations_.end() && it->second.discovered ? '*' : '?';
+    };
+
     std::cout << "\n                 THE KNOWN LANDS\n";
-    std::cout << "                  [Sunken Ruins]\n";
+    std::cout << "                  [" << marker("ruins") << "] Sunken Ruins\n";
     std::cout << "                       |\n";
-    std::cout << "              [Whispering Forest]\n";
+    std::cout << "              [" << marker("forest") << "] Whispering Forest\n";
     std::cout << "                       |\n";
-    std::cout << "[Willowmere Village] -- [Old King's Crossroads] -- [Moonwell Lake]\n";
-    std::cout << "\nYou are at: " << (current() ? current()->name : "Unknown") << "\n";
-    std::cout << "Discovered places are marked on your map as you travel.\n";
+    std::cout << "[" << marker("village") << "] Willowmere Village -- ["
+              << marker("crossroads") << "] Old King's Crossroads -- ["
+              << marker("lake") << "] Moonwell Lake\n";
+    std::cout << "\n@ = your location   * = discovered   ? = unexplored\n";
 }
 
 const std::string& WorldMap::currentId() const { return currentId_; }
@@ -86,6 +93,23 @@ bool WorldMap::setCurrent(const std::string& locationId) {
     currentId_ = locationId;
     it->second.discovered = true;
     return true;
+}
+
+std::vector<std::string> WorldMap::discoveredIds() const {
+    std::vector<std::string> ids;
+    for (const auto& entry : locations_) {
+        if (entry.second.discovered) ids.push_back(entry.first);
+    }
+    return ids;
+}
+
+void WorldMap::restoreDiscovered(const std::vector<std::string>& ids) {
+    for (auto& entry : locations_) entry.second.discovered = false;
+    for (const auto& id : ids) {
+        auto it = locations_.find(id);
+        if (it != locations_.end()) it->second.discovered = true;
+    }
+    if (locations_.count(currentId_)) locations_[currentId_].discovered = true;
 }
 
 } // namespace lostkingdom

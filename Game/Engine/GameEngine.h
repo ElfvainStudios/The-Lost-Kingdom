@@ -3,6 +3,7 @@
 
 #include "GameTypes.h"
 #include "../World/WorldMap.h"
+#include "../Systems/QuestSystem.h"
 #include <string>
 
 namespace lostkingdom {
@@ -14,6 +15,7 @@ public:
 private:
     Player player_;
     WorldMap world_;
+    QuestSystem quests_;
     bool running_ = true;
 
     void showIntro();
@@ -27,6 +29,8 @@ private:
     void explore();
     void rest();
     void createCharacter();
+    void talk();
+    void fight();
 };
 
 } // namespace lostkingdom

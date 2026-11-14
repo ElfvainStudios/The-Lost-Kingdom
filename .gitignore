@@ -1,5 +1,6 @@
 .groupcode
 .env
 app.exe
-
+savegame.dat
+build/
 .vs
