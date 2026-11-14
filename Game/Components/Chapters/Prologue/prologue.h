@@ -1,5 +1,5 @@
-#ifndef PROLOGUE_H
-#define PROLOGUE_H
+#ifndef LOST_KINGDOM_PROLOGUE_H
+#define LOST_KINGDOM_PROLOGUE_H
 
 void prologue();
 

@@ -15,29 +15,13 @@ bool CombatSystem::encounter(Player& player, const std::string& locationId) {
     int rewardGold = 6;
 
     if (locationId == "forest") {
-        enemyName = "Thorn Wolf";
-        enemyHealth = 22;
-        enemyAttack = 6;
-        rewardXp = 25;
-        rewardGold = 8;
+        enemyName = "Thorn Wolf"; enemyHealth = 22; enemyAttack = 6; rewardXp = 25; rewardGold = 8;
     } else if (locationId == "ruins") {
-        enemyName = "Restless Sentinel";
-        enemyHealth = 34;
-        enemyAttack = 8;
-        rewardXp = 40;
-        rewardGold = 14;
+        enemyName = "Restless Sentinel"; enemyHealth = 34; enemyAttack = 8; rewardXp = 40; rewardGold = 14;
     } else if (locationId == "lake") {
-        enemyName = "Mist Wisp";
-        enemyHealth = 16;
-        enemyAttack = 7;
-        rewardXp = 22;
-        rewardGold = 9;
+        enemyName = "Mist Wisp"; enemyHealth = 16; enemyAttack = 7; rewardXp = 22; rewardGold = 9;
     } else if (locationId == "crossroads") {
-        enemyName = "Roadside Bandit";
-        enemyHealth = 20;
-        enemyAttack = 5;
-        rewardXp = 20;
-        rewardGold = 10;
+        enemyName = "Roadside Bandit"; enemyHealth = 20; enemyAttack = 5; rewardXp = 20; rewardGold = 10;
     } else {
         std::cout << "There is nobody here looking for a fight.\n";
         return true;
@@ -51,7 +35,8 @@ bool CombatSystem::encounter(Player& player, const std::string& locationId) {
     while (enemyHealth > 0 && player.health > 0) {
         std::cout << "\n" << enemyName << " HP: " << enemyHealth
                   << " | Your HP: " << player.health << "/" << player.maxHealth
-                  << "\nChoose: [A]ttack, [D]efend, [P]otion, [R]un: ";
+                  << " | Mana: " << player.mana << "/" << player.maxMana
+                  << "\nChoose: [A]ttack, [D]efend, [P]otion, [M]agic, [R]un: ";
         std::string action;
         if (!std::getline(std::cin, action)) return false;
         if (action.empty()) continue;
@@ -69,21 +54,35 @@ bool CombatSystem::encounter(Player& player, const std::string& locationId) {
                 std::cout << "You have no healing potions.\n";
                 continue;
             }
-            const int before = player.health;
-            if (before == player.maxHealth) {
+            if (player.health == player.maxHealth) {
                 std::cout << "Your health is already full; you save the potion.\n";
                 continue;
             }
+            const int before = player.health;
             player.inventory.erase(potion);
             player.health = std::min(player.maxHealth, player.health + 15);
             std::cout << "You recover " << player.health - before << " health.\n";
+        } else if (choice == 'm') {
+            if (std::find(player.knownSpells.begin(), player.knownSpells.end(), "Arcane Spark") == player.knownSpells.end()) {
+                std::cout << "You have not learned Arcane Spark. Read an ancient spellbook first.\n";
+                continue;
+            }
+            if (player.mana < 5) {
+                std::cout << "You do not have enough mana.\n";
+                continue;
+            }
+            player.mana -= 5;
+            const int damage = 10 + variation(rng) * 2;
+            enemyHealth = std::max(0, enemyHealth - damage);
+            std::cout << "Arcane Spark strikes the " << enemyName << " for " << damage << " damage.\n";
+            if (enemyHealth == 0) break;
         } else if (choice == 'a') {
             const int damage = std::max(1, player.attack + variation(rng));
             enemyHealth = std::max(0, enemyHealth - damage);
             std::cout << "You strike the " << enemyName << " for " << damage << " damage.\n";
             if (enemyHealth == 0) break;
         } else {
-            std::cout << "Choose attack, defend, potion or run.\n";
+            std::cout << "Choose attack, defend, potion, magic or run.\n";
             continue;
         }
 
@@ -99,21 +98,21 @@ bool CombatSystem::encounter(Player& player, const std::string& locationId) {
     if (player.health <= 0) {
         player.health = 1;
         player.gold = std::max(0, player.gold - 5);
-        std::cout << "You fall unconscious and awaken in Willowmere Village. "
-                  << "You lose 5 gold but survive.\n";
+        std::cout << "You fall unconscious and awaken in Willowmere Village. You lose 5 gold but survive.\n";
         return false;
     }
 
     player.experience += rewardXp;
     player.gold += rewardGold;
-    std::cout << "Victory! You gain " << rewardXp << " XP and "
-              << rewardGold << " gold.\n";
+    std::cout << "Victory! You gain " << rewardXp << " XP and " << rewardGold << " gold.\n";
     while (player.experience >= player.level * 50) {
         player.experience -= player.level * 50;
         ++player.level;
         player.maxHealth += 5;
         player.attack += 1;
+        player.maxMana += 2;
         player.health = player.maxHealth;
+        player.mana = player.maxMana;
         std::cout << "Level up! You are now level " << player.level << ".\n";
     }
     return true;

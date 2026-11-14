@@ -1,5 +1,4 @@
 #include "prologue.h"
-#include "../../Character-Creation/characterCreation.h"
 #include <iostream>
 #include <string>
 
@@ -222,7 +221,5 @@ void prologue() {
 
     cout << "============================================================\n\n";
 
-    cout << "Preparing character creation...\n\n";
-
-    characterCreation();
+    cout << "The tale is now yours to continue.\n\n";
 }
