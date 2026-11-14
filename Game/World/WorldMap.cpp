@@ -68,14 +68,21 @@ std::vector<const Location*> WorldMap::availableExits() const {
 }
 
 void WorldMap::printMap() const {
+    const auto marker = [this](const std::string& id) {
+        const auto it = locations_.find(id);
+        if (id == currentId_) return '@';
+        return it != locations_.end() && it->second.discovered ? '*' : '?';
+    };
+
     std::cout << "\n                 THE KNOWN LANDS\n";
-    std::cout << "                  [Sunken Ruins]\n";
+    std::cout << "                  [" << marker("ruins") << "] Sunken Ruins\n";
     std::cout << "                       |\n";
-    std::cout << "              [Whispering Forest]\n";
+    std::cout << "              [" << marker("forest") << "] Whispering Forest\n";
     std::cout << "                       |\n";
-    std::cout << "[Willowmere Village] -- [Old King's Crossroads] -- [Moonwell Lake]\n";
-    std::cout << "\nYou are at: " << (current() ? current()->name : "Unknown") << "\n";
-    std::cout << "Discovered places are marked on your map as you travel.\n";
+    std::cout << "[" << marker("village") << "] Willowmere Village -- ["
+              << marker("crossroads") << "] Old King's Crossroads -- ["
+              << marker("lake") << "] Moonwell Lake\n";
+    std::cout << "\n@ = your location   * = discovered   ? = unexplored\n";
 }
 
 const std::string& WorldMap::currentId() const { return currentId_; }
