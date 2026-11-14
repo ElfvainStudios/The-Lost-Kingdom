@@ -1,5 +1,6 @@
 #include "CombatSystem.h"
 #include <algorithm>
+#include <cctype>
 #include <iostream>
 #include <random>
 #include <string>
